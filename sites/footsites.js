@@ -8,8 +8,8 @@ async function enterAddressDetails({ page, address }) {
     const lastNameSelector = 'input[name="lastName"]';
     const address1Selector = 'input[name="line1"]';
     const address2Selector = 'input[name="line2"]';
-    // const citySelector = 'input[name="town"]';
-    // const stateSelector = 'select[name="region"]';
+     const citySelector = 'input[name="town"]';
+     const stateSelector = 'select[name="region"]';
     const postalCodeSelector = 'input[name="postalCode"]';
 
     const firstNameHandle = await page.$(firstNameSelector);
@@ -56,15 +56,15 @@ async function enterAddressDetails({ page, address }) {
 
     // Prefilled by footsites
 
-    // await page.waitForSelector(citySelector);
-    // await page.type(citySelector, address.city, {
-    //   delay: 10
-    // });
-    // await page.waitForTimeout(2000);
+    await page.waitForSelector(citySelector);
+    await page.type(citySelector, address.city, {
+      delay: 10
+    });
+    await page.waitForTimeout(2000);
 
-    // await page.waitForSelector(stateSelector);
-    // await page.select(stateSelector, address.state);
-    // await page.waitForTimeout(2000);
+    await page.waitForSelector(stateSelector);
+    await page.select(stateSelector, address.state);
+    await page.waitForTimeout(2000);
   } catch (err) {
     throw err;
   }
@@ -319,6 +319,7 @@ exports.guestCheckout = async ({
 
     closeModal({ taskLogger, page });
 
+
     if (productCode) {
       await searchByProductCode({
         taskLogger,
@@ -335,7 +336,6 @@ exports.guestCheckout = async ({
       if (page.url() !== url) {
         await page.goto(url, { waitUntil: ['load', 'domcontentloaded'] });
       }
-
       // using timeout 0 in case we are caught in queue...will wait for the selector to appear
       taskLogger.info('Selecting style');
       const stylesSelector = 'div.c-form-field.c-form-field--radio.SelectStyle.col';
@@ -348,9 +348,18 @@ exports.guestCheckout = async ({
       taskLogger.info('Selecting size');
       const sizesSelector = 'div.c-form-field.c-form-field--radio.ProductSize';
       await page.waitForSelector(sizesSelector);
+      console.log(123);
       await page.waitForFunction(({ selector, sizeStr }) => {
+        console.log(234);
+        console.log(selector);
+        console.log(document.querySelectorAll(selector));
         const sizeDivs = Array.from(document.querySelectorAll(selector));
-        const matchingSizeDiv = sizeDivs.find((el) => new RegExp(sizeStr, 'i').test(el.innerText));
+console.log('asd',sizeDivs);
+        const matchingSizeDiv = sizeDivs.find((el) => {
+          console.log(sizeStr,el.innerText);
+            return new RegExp(sizeStr, 'i').test(el.innerText)
+          }
+        );
         const matchingSizeInput = matchingSizeDiv && matchingSizeDiv.querySelector('input');
         if (matchingSizeInput) {
           matchingSizeInput.click();

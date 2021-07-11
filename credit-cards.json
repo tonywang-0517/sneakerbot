@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "friendlyName": "Test",
+    "cardNumber": "4242424242424242",
+    "nameOnCard": "asd",
+    "expirationMonth": "01",
+    "expirationYear": "22",
+    "securityCode": "123"
+  }
+]

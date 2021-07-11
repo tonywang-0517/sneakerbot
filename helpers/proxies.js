@@ -7,11 +7,10 @@ exports.createProxyString = (proxy) => `${proxy.protocol}://${proxy.username
 exports.testProxy = async (proxyString) => {
   try {
     const options = {
-      uri: 'http://www.google.com',
+      uri: 'http://www.baidu.com',
       proxy: proxyString,
       resolveWithFullResponse: true
     };
-
     const response = await rp(options);
     return response.statusCode === 200;
   } catch (err) {

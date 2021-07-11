@@ -18,7 +18,7 @@ puppeteer.use(StealthPlugin());
 
 class PuppeteerCluster {
   static async build() {
-    const proxies = await new Proxy().find({ has_been_used: false });
+    const proxies = await new Proxy().find({ has_been_used: true });
     const validProxy = proxies.find(async (proxy) => {
       const proxyString = createProxyString(proxy);
       if (await testProxy(proxyString)) {
@@ -27,6 +27,7 @@ class PuppeteerCluster {
       }
       return false;
     });
+
     const proxy = validProxy ? createProxyString(validProxy) : null;
 
     const puppeteerOptions = {
@@ -43,7 +44,7 @@ class PuppeteerCluster {
       puppeteerOptions.executablePath = '/usr/bin/google-chrome-stable';
     }
     if (proxy) {
-      puppeteerOptions.args.push(`--proxy-server=${proxy}`);
+      //puppeteerOptions.args.push(`--proxy-server=${proxy}`);
     }
     const cluster = await Cluster.launch({
       puppeteer,
